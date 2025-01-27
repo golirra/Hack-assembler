@@ -1,12 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "linked_list.h"
 
 
 /*linked list:
  * made of nodes, each node has a link to the next node in the list
+ *
  */
+//FILE *file_ptr; 
+
+typedef struct Node {
+    int value;
+    char* key;//should it be a pointer to the key?
+    struct Node* next;
+} Node;
+
 Node* create_node(const char* key, int value) {
     Node* new_node = (Node*)malloc(sizeof(Node));
     new_node->value = value;
@@ -48,6 +56,12 @@ void free_list(Node* head) {
 }
 
 
+int main() {
+    Node* head = NULL;
+    insert(&head, "apple", 10);
+    insert(&head, "orange", 11);
+    display(head);
+}
 
 
 
