@@ -1,4 +1,3 @@
-// C program to read a file using fgetc()
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +15,9 @@ int main() {
     FILE *file_ptr;
     int line_count = 0;
     char dest[50] = "";
-    char instruction[50] = "";
+    char instruction[16] = "";
     bool is_a_instruction = false;
+    unsigned int num;
 
     // Character buffer that stores the read character till the next iteration
     char ch;
@@ -31,24 +31,25 @@ int main() {
     while ((ch = fgetc(file_ptr)) != EOF) {
         if(ch == '\n') //increment linecount if character is a newline
             line_count = line_count + 1;
-        if(ch == '@'){//has to be an a instruction 
+        if(ch == '@'){
             is_a_instruction = true;
+            memset(instruction, '\0', sizeof(instruction));
             continue; //go to next iteration of while loop
-            //strncat(dest, "0", 1);
         } 
         if(is_a_instruction) {
             if(ch == '\n'){
+                num = atoi(instruction);//atoi doesnt handle errors? could be dangerous
+                printf("%d",num);
+                printBinary16(num);
                 is_a_instruction = false;
-                break;
+                printf("Instruction: %s\n", instruction); 
+                continue;
             } else {
                 strncat(instruction, &ch, 1);
             }
         }
-
-
     }
     printf("Line count: %d\n", line_count);
-    printf("Instruction: %s", instruction);
     // close the file
     fclose(file_ptr);
     return 0;

@@ -1,7 +1,5 @@
-
 #include <stdio.h>
 #include "binary.h"
-
 
 void printBinary16(unsigned int num) {
     for (int i = 14; i >= 0; i--) {
@@ -11,6 +9,7 @@ void printBinary16(unsigned int num) {
     }
     printf("\n");
 }
+/*
 int main() {
      unsigned int number;
     // Get user input
@@ -25,3 +24,4 @@ int main() {
     printBinary16(number);
     return 0; 
 }
+*/
