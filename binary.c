@@ -4,7 +4,7 @@
 
 
 void printBinary16(unsigned int num) {
-    for (int i = 15; i >= 0; i--) {
+    for (int i = 14; i >= 0; i--) {
         // Extract the i-th bit using a bitwise AND and shift
         unsigned int bit = (num >> i) & 1;
         printf("%u", bit);
