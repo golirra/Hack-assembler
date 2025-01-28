@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "linked_list.h"
-
-
 /*linked list:
  * made of nodes, each node has a link to the next node in the list
  */
