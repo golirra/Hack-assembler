@@ -15,3 +15,6 @@ int main() {
     ptr->key = "example";
     //so in C we need -> to access the members of the struct, not the dot(.) operator
 }
+/*
+ * can make pointer of pointers eg Symbol **symbols;
+ */
