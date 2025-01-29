@@ -1,10 +1,20 @@
 #include <stdio.h>
 #include <string.h>
+#include "PredefinedSymbols.h"
 
 
-const char* getBinaryCode(const char *input) {
+/**
+ *
+ * This function returns a binary code based on parts of a "C" instruction.
+ * 
+ * @param *input The input string to check
+ * @param c_instruct_field Decides which part of the instruction to convert
+ * @return The binary code of the input
+ */
+
+const char* getBinaryCode(const char *input, InstructField c_instruct_field) {
     //comp field, a=0
-    if(1) {
+    if(c_instruct_field == COMP) {
         if (strcmp(input, "0") == 0) return "0101010";
         if (strcmp(input, "1") == 0) return "0111111";
         if (strcmp(input, "-1") == 0) return "0111010";
@@ -36,7 +46,7 @@ const char* getBinaryCode(const char *input) {
         if (strcmp(input, "D|M") == 0) return "1010101";
     }
     //dest field
-    if(2){
+    if(c_instruct_field == DEST){
         if (strcmp(input, "M") == 0) return "001";
         if (strcmp(input, "D") == 0) return "010";
         if (strcmp(input, "MD") == 0) return "011";
@@ -46,7 +56,7 @@ const char* getBinaryCode(const char *input) {
         if (strcmp(input, "AMD") == 0) return "111";
     }
     //jump field
-    if(3) {
+    if(c_instruct_field == JUMP) {
         if (strcmp(input, "JGT") == 0) return "001";
         if (strcmp(input, "JEQ") == 0) return "010";
         if (strcmp(input, "JGE") == 0) return "011";

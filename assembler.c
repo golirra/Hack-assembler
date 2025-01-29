@@ -15,14 +15,7 @@ typedef struct SymbolTable {
     size_t count;
     size_t capacity;
 } SymbolTable;
-/* is this over designed?xd
-typedef enum {
-    STATE_NORMAL, //default
-    STATE_COMMENT,
-    STATE_SKIPLINE,
-    STATE_WHITESPACE
-} ParserState;
-*/
+
 
 void add_symbol (SymbolTable *table, const char *name, int value) {
     if (table->count == table->capacity) {
@@ -51,20 +44,21 @@ void add_symbol (SymbolTable *table, const char *name, int value) {
 }
 int main() {
     FILE *file_ptr;
-    int line_count = 1;
-    char a_or_c_bit = '0';
+    unsigned int line_count = 1;
     char *dest;
     char *comp;
     char *jump;
+    char instruction[17];
     bool is_a_instruction = false;
     bool is_c_instruction = false;
     bool skip_line = false;
     bool whitespace = false;
     unsigned int num;
-    SymbolTable table = {NULL, 0, 0};
-    add_symbol(&table, "symbol1", 100);
-    //printf("%s", table.symbols[0]->name);//symbol pointer print test>??
     char *token;
+    InstructField c_instruct_field;
+    //SymbolTable table = {NULL, 0, 0};
+    //add_symbol(&table, "symbol1", 100);
+    //printf("%s", table.symbols[0]->name);//symbol pointer print test>??
 
     // Character buffer that stores the read character till the next iteration
     char buff[200];
@@ -83,35 +77,42 @@ int main() {
         //A Instructions 
         if(strchr(buff, '@')){
             token = strtok(buff, " \t@");//strip unecessary chars from line
-            a_or_c_bit = '0';
             num = atoi(token);
-            printf("%c",a_or_c_bit);
-            printBinary16(num);
+            //printf("%c",a_or_c_bit);
+            printf("A: ");
+            printf("%s",getBinary16(num));
         }
         //C Instructions
         if(strchr(buff, '=')){
-            token = strtok(buff, " \t"); 
-            a_or_c_bit = '1';
-            //printf("%c", a_or_c_bit);
-            dest = strtok(token, "=");
-            comp = strtok(NULL, "=");
-            printf("%s",dest);
-            //printf("%s",getBinaryCode(comp));
-            //printf("%s",getBinaryCode(dest));
+            printf(" C: ");
+            strcat(instruction, "111");
+            token = strtok(buff, " \t\n"); 
+            dest = strtok(token, "=");//stuff before the '='
+            comp = strtok(NULL, "=");//stuff after the '='
+            strcat(instruction, getBinaryCode(comp,COMP));
+            strcat(instruction, getBinaryCode(dest,DEST));
+            strcat(instruction, "000");
+            printf("%s", instruction);
             printf("\n");
         }
         if(strchr(buff, ';')){
-            token = strtok(buff, " \t"); 
-            a_or_c_bit = '1';
-            //printf("%c", a_or_c_bit);
+            printf(" C: ");
+            strcat(instruction, "111");
+            token = strtok(buff, " \t\n"); 
             comp = strtok(token, ";");
             jump = strtok(NULL, ";");
-            //printf("%s",getBinaryCode(comp));
-            printf("%s",getBinaryCode(jump));
+            strcat(instruction, getBinaryCode(comp,COMP));
+            strcat(instruction, "000");
+            strcat(instruction, getBinaryCode(jump,JUMP));
+            printf("%s", instruction);
             printf("\n");
+        }
+        if(strchr(buff, '(')){
+            printf("%s", buff);
         }
         token = NULL;//reset the instruction string
         line_count = line_count + 1;
+        memset(instruction, '\0', sizeof(instruction));
     }
     // close the file
     fclose(file_ptr);

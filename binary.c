@@ -1,13 +1,21 @@
 #include <stdio.h>
 #include "binary.h"
+#include <malloc.h>
 
-void printBinary16(unsigned int num) {
+char* getBinary16(unsigned int num) {
+    char* binaryStr = (char*)malloc(16 * sizeof(char));//15 bit binary number + bit for null terminator
+    if (binaryStr == NULL){
+        fprintf(stderr, "memalloc failed\n");
+        return NULL;
+
+    }
     for (int i = 14; i >= 0; i--) {
         // Extract the i-th bit using a bitwise AND and shift
         unsigned int bit = (num >> i) & 1;
-        printf("%u", bit);
+        binaryStr[14-i] = bit + '0';
     }
-    printf("\n");
+    binaryStr[16] ='\0';//null terminate the last bit
+    return binaryStr;
 }
 /*
 int main() {
