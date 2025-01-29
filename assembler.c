@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "linked_list.h"
 #include "binary.h"//takes in an int currently
+#include "PredefinedSymbols.h"
 typedef struct Symbol {
     char *name;//strings are going to be a pointer of chars
     int value;
@@ -50,11 +51,11 @@ void add_symbol (SymbolTable *table, const char *name, int value) {
 }
 int main() {
     FILE *file_ptr;
-    int line_count = 0;
-    char instruction[16] = "";
-    char dest[4];
-    char comp[4];
-    char jump[4];
+    int line_count = 1;
+    char a_or_c_bit = '0';
+    char *dest;
+    char *comp;
+    char *jump;
     bool is_a_instruction = false;
     bool is_c_instruction = false;
     bool skip_line = false;
@@ -64,10 +65,9 @@ int main() {
     add_symbol(&table, "symbol1", 100);
     //printf("%s", table.symbols[0]->name);//symbol pointer print test>??
     char *token;
-    char *at_pos;
 
     // Character buffer that stores the read character till the next iteration
-    char buff[20];
+    char buff[200];
     // open file in read mode
     file_ptr = fopen("assembly-examples.txt", "r");
     if (NULL == file_ptr) {
@@ -76,18 +76,42 @@ int main() {
     }
     //Parse the file
     while(fgets(buff, sizeof(buff), file_ptr)) {
-        //printf("%s", buff);//print raw line
-        token = strtok(buff, "@");
-        at_pos = strchr(buff, '@');
-        if(at_pos != NULL) {//is an a instruction
-            //strncat(instruction, at_pos, 1);
-            instruction[0] = '0';
+        //Skip comment lines
+        if(strchr(buff, '/')){
+            continue;
+        }
+        //A Instructions 
+        if(strchr(buff, '@')){
+            token = strtok(buff, " \t@");//strip unecessary chars from line
+            a_or_c_bit = '0';
             num = atoi(token);
-            printf("%s", instruction);
+            printf("%c",a_or_c_bit);
             printBinary16(num);
         }
-        memset(instruction, '\0', sizeof(instruction));//reset the instruction string 
-        //printf("%s", token);
+        //C Instructions
+        if(strchr(buff, '=')){
+            token = strtok(buff, " \t"); 
+            a_or_c_bit = '1';
+            //printf("%c", a_or_c_bit);
+            dest = strtok(token, "=");
+            comp = strtok(NULL, "=");
+            printf("%s",dest);
+            //printf("%s",getBinaryCode(comp));
+            //printf("%s",getBinaryCode(dest));
+            printf("\n");
+        }
+        if(strchr(buff, ';')){
+            token = strtok(buff, " \t"); 
+            a_or_c_bit = '1';
+            //printf("%c", a_or_c_bit);
+            comp = strtok(token, ";");
+            jump = strtok(NULL, ";");
+            //printf("%s",getBinaryCode(comp));
+            printf("%s",getBinaryCode(jump));
+            printf("\n");
+        }
+        token = NULL;//reset the instruction string
+        line_count = line_count + 1;
     }
     // close the file
     fclose(file_ptr);

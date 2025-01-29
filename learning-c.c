@@ -18,3 +18,9 @@ int main() {
 /*
  * can make pointer of pointers eg Symbol **symbols;
  */
+
+char *token;
+char str[10];
+token = strtok(str, " \t\n");
+//strtok can have multiple delimiter
+//strtok can also grab before/ after the delimiter by calling strtok a second time and using NULL as the input string
