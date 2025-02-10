@@ -3,7 +3,7 @@
 #include <malloc.h>
 
 char* getBinary16(unsigned int num) {
-    char* binaryStr = (char*)malloc(16 * sizeof(char));//15 bit binary number + bit for null terminator
+    char* binaryStr = (char*)malloc(17 * sizeof(char));//15 bit binary number + bit for null terminator
     if (binaryStr == NULL){
         fprintf(stderr, "memalloc failed\n");
         return NULL;
@@ -14,7 +14,7 @@ char* getBinary16(unsigned int num) {
         unsigned int bit = (num >> i) & 1;
         binaryStr[14-i] = bit + '0';
     }
-    binaryStr[16] ='\0';//null terminate the last bit
+    binaryStr[17] ='\0';//null terminate the last bit
     return binaryStr;
 }
 /*
